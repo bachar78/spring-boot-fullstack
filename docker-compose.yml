@@ -1,7 +1,7 @@
 services:
   project-db:
     container_name: postgres
-    image: postgres
+    image: postgres:latest
     environment:
       POSTGRES_USER: bachar
       POSTGRES_PASSWORD: password
