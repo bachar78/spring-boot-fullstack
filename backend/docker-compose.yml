@@ -1,0 +1,33 @@
+services:
+  project-db:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: bachar
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/project-db
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+  fullstack-api:
+    container_name: fullStack-API
+    image: bdaowd/fullstack-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://project-db:5432/customer
+    ports:
+      - "8088:8080"
+    networks:
+      - postgres
+    depends_on:
+      - project-db
+    restart: unless-stopped
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
