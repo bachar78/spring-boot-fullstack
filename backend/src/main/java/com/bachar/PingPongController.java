@@ -12,4 +12,9 @@ public class PingPongController {
     public PingPong getPingPong() {
         return new PingPong("Pong");
     }
+
+    @GetMapping("/health")
+    public String getStatus() {
+        return "Status is Up";
+    }
 }
