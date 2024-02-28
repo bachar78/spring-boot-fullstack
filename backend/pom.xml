@@ -14,8 +14,13 @@
 	<name>bachar-fullStack-api</name>
 	<description> Project for Spring Boot api</description>
 	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 		<java.version>17</java.version>
 		<docker.username>bdaowd</docker.username>
+		<docker.image.name>fullstack-api</docker.image.name>
+		<!-- This will be populated during runtime -->
+		<docker.image.tag/>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -180,7 +185,7 @@
 						</platforms>
 					</from>
 					<to>
-						<image>docker.io/${docker.username}/${project.artifactId}:${project.version}</image>
+						<image>docker.io/${docker.username}/${docker.image.name}:${docker.image.tag}</image>
 						<tags>
 							<tag>latest</tag>
 						</tags>
