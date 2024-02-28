@@ -6,7 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PingPongController {
 
-    record PingPong(String result){}
+    record PingPong(String result) {
+    }
+
+    record HealthStatus(String status) {
+    }
 
     @GetMapping("/ping")
     public PingPong getPingPong() {
@@ -14,7 +18,7 @@ public class PingPongController {
     }
 
     @GetMapping("/health")
-    public String getStatus() {
-        return "Status is Up";
+    public HealthStatus getStatus() {
+        return new HealthStatus("Up");
     }
 }
