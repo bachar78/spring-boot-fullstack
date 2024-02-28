@@ -15,7 +15,9 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
+        System.out.println("Running the main Method");
     }
+
 
     @Bean
     CommandLineRunner runner(CustomerRepository customerRepository) {
