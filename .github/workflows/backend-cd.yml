@@ -30,8 +30,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Send Slack Message
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
+        run: >
+          curl -X POST -H 'Content-type: application/json'
+          --data '{"text":"Deployment started :progress_bar: :fingerscrossed:"}' 
+          ${{ secrets.SLACK_WEBHOOK_URL }}
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -96,12 +98,12 @@ jobs:
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          --data '{"text":"Deployment and commit completed :done: ${{secrets.AWS_ENVIRONMENT_URL}}"}' 
+          --data '{"text":":githubloading: Deployment and commit completed :done: ${{secrets.AWS_ENVIRONMENT_URL}}"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Send Slack Message
         if: always()
         run: >
-          curl && curl -X POST -H 'Content-type: application/json' 
+          curl -X POST -H 'Content-type: application/json' 
           --data '{"text":"Job Status ${{ job.status }}"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
 
