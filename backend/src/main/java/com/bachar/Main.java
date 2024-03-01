@@ -15,7 +15,7 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-        System.out.println("Running the main Method");
+        System.out.println("Application is running");
     }
 
 
