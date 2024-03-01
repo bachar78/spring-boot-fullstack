@@ -28,11 +28,4 @@ public class GenerateRequests {
         return CustomerUpdateRequest.builder().name(name).email(email).age(age).build();
     }
 
-    public static Customer generateCustomer() {
-        String name = faker.name().firstName();
-        String email = name + UUID.randomUUID()+"@example.com";
-        int age = random.nextInt(18,77);
-        return Customer.builder().name(name).email(email).age(age).build();
-    }
-
 }
