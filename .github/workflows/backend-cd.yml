@@ -32,7 +32,7 @@ jobs:
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json'
-          --data '{"text":"Deployment started :progress_bar: :fingers_crossed:"}' 
+          --data '{"text":"Deployment started :progress_bar: :crossed_fingers:"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
       - uses: actions/setup-java@v4
         with:

@@ -12,6 +12,6 @@ public class HealthController {
 
     @GetMapping("/health")
     public HealthStatus getStatus() {
-        return new HealthStatus("Up url has been called: %s times".formatted(++COUNTER) );
+        return new HealthStatus("Up\" health url has been called: %s times".formatted(++COUNTER) );
     }
 }
