@@ -28,9 +28,6 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-      - name: try new run
-        run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
