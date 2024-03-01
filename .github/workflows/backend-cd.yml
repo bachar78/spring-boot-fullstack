@@ -29,10 +29,8 @@ jobs:
         working-directory: ./backend
     steps:
       - name: Send Slack Message
-        run: >
-          curl -X POST -H 'Content-type: application/json' 
-          --data '{"text":"Deployment started :progress_bar: :fingerscrossed:"}' 
-          ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
