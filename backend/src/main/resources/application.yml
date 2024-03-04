@@ -24,4 +24,7 @@ spring:
   main:
     web-application-type: servlet
 
+cors:
+  allowed-origins: "*"
+  allowed-methods: "*"
 
