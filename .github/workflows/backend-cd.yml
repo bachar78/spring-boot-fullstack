@@ -11,24 +11,29 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     services:
-        postgres:
-          image: postgres:15.5
-          env:
-            POSTGRES_USER: bachar
-            POSTGRES_PASSWORD: password
-            POSTGRES_DB: customer
-          ports:
-            - 5332:5432
-          options: >-
-            --health-cmd pg_isready
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
+      postgres:
+        image: postgres:15.5
+        env:
+          POSTGRES_USER: bachar
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: customer
+        ports:
+          - 5332:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     defaults:
       run:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v4
+      - name: Slack commit message and sha
+        run: >
+          curl -X POST -H 'Content-type: application/json'
+          --data '{"text":":github: https://github.com/bachar78/spring-boot-fullstack/commit/${{github.sha}} - ${{github.event.head_commit.message}}"}' 
+          ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json'
@@ -44,7 +49,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-    ## here how we can export any value from any step
+      ## here how we can export any value from any step
       - name: Set build number
         id: build-number
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
