@@ -10,8 +10,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CustomerJPADateAccessServiceTest {
     Faker faker = new Faker();
     private CustomerJPADateAccessService underTest;
@@ -57,8 +55,8 @@ class CustomerJPADateAccessServiceTest {
         Customer customer = new Customer(
                 faker.name().fullName(),
                 faker.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
-        );
+                20,
+                Gender.MALE);
 
         //When
         underTest.insertCustomer(customer);
@@ -102,8 +100,8 @@ class CustomerJPADateAccessServiceTest {
         Customer customer = new Customer(
                 faker.name().fullName(),
                 faker.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20
-        );
+                20,
+                Gender.MALE);
         //When
         underTest.updateCustomer(customer);
         //Then

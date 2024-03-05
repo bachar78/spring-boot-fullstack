@@ -3,5 +3,5 @@ package com.bachar.customer;
 import lombok.Builder;
 
 @Builder
-public record CustomerRegistrationRequest(String name, String email, Integer age) {
+public record CustomerRegistrationRequest(String name, String email, Integer age, Gender gender) {
 }

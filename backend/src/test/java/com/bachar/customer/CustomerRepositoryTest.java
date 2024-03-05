@@ -38,8 +38,8 @@ class CustomerRepositoryTest extends AbstractTestcontainers{
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
-        );
+                20,
+                Gender.MALE);
         underTest.save(customer);
         //When
         var existingCustomer = underTest.existsCustomerByEmail(customer.getEmail());
@@ -64,8 +64,8 @@ class CustomerRepositoryTest extends AbstractTestcontainers{
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20
-        );
+                20,
+                Gender.MALE);
         underTest.save(customer);
         Long customerId = underTest.findAll().stream().filter(c -> c.getEmail().equals(email))
                 .map(Customer::getId)

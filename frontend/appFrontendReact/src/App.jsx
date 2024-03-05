@@ -2,7 +2,7 @@ import {Wrap, WrapItem, Spinner, Text} from '@chakra-ui/react'
 import SidebarWithHeader from "./shared/SideBar.jsx";
 import {useEffect, useState} from "react";
 import {getCustomers} from "./services/client.js";
-import CardWithImage from "./components/Card.jsx";
+import CardWithImage from "./components/CardWithImage.jsx";
 
 
 const App = () => {
@@ -48,6 +48,7 @@ const App = () => {
                         <WrapItem key={index}>
                             <CardWithImage
                                 {...customer}
+                                imageNumber={index}
                             />
                         </WrapItem>
                     ))}

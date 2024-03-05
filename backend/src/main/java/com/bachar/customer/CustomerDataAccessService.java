@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Repository("fake")
 public class CustomerDataAccessService implements CustomerDao {
@@ -13,8 +12,8 @@ public class CustomerDataAccessService implements CustomerDao {
 
     static {
         customers = new ArrayList<>();
-        Customer bachar = new Customer(1L, "Bachar", "bachar@example.com", 45);
-        Customer ali = new Customer(2L, "Ali", "ali@example.com", 33);
+        Customer bachar = new Customer(1L, "Bachar", "bachar@example.com", 45, Gender.MALE);
+        Customer ali = new Customer(2L, "Ali", "ali@example.com", 33, Gender.MALE);
         customers.add(bachar);
         customers.add(ali);
     }

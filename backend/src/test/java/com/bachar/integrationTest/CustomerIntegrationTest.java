@@ -64,7 +64,7 @@ public class CustomerIntegrationTest {
                 .getResponseBody();
 
         // make sure that customer is present
-        Customer expectedCustomer = new Customer(request.name(), request.email(), request.age());
+        Customer expectedCustomer = new Customer(request.name(), request.email(), request.age(), request.gender());
         assertThat(allCustomer)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
                 .contains(expectedCustomer);
@@ -171,9 +171,7 @@ public class CustomerIntegrationTest {
                 })
                 .returnResult()
                 .getResponseBody();
-        Customer expected = Customer.builder().id(customerId).name(updateRequest.name())
-                .email(updateRequest.email())
-                .age(updateRequest.age()).build();
-         assertThat(updatedCustomerInDB).isEqualTo(expected);
+        Customer expected = new Customer(customerId, updateRequest.name(), updateRequest.email(), updateRequest.age(), updateRequest.gender());
+        assertThat(updatedCustomerInDB).isEqualTo(expected);
     }
 }

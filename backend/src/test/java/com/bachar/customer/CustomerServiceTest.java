@@ -14,7 +14,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +42,7 @@ class CustomerServiceTest {
     void canGetCustomer() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //Then
@@ -66,7 +65,7 @@ class CustomerServiceTest {
     @Test
     void addCustomer() {
         //Given
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Bachar", "bachar@example.com", 45);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Bachar", "bachar@example.com", 45, Gender.MALE);
         //When
         when(customerDao.checkIfEmailExist(request.email())).thenReturn(false);
         //Then
@@ -83,7 +82,7 @@ class CustomerServiceTest {
     @Test
     void addCustomerThrowError() {
         //Given
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Bachar", "bachar@example.com", 45);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Bachar", "bachar@example.com", 45, Gender.MALE);
         //When
         when(customerDao.checkIfEmailExist(request.email())).thenReturn(true);
         //Then
@@ -118,11 +117,11 @@ class CustomerServiceTest {
     void updateAllCustomerProperties() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
-        CustomerUpdateRequest request = new CustomerUpdateRequest("Samer", "samer@example.com", 43);
+        CustomerUpdateRequest request = new CustomerUpdateRequest("Samer", "samer@example.com", 43, Gender.MALE);
         when(customerDao.checkIfEmailExist(request.email())).thenReturn(false);
         underTest.updateCustomer(request, id);
         //Then
@@ -138,11 +137,11 @@ class CustomerServiceTest {
     void updateCustomerName() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
-        CustomerUpdateRequest request = new CustomerUpdateRequest("Samer", null, null);
+        CustomerUpdateRequest request = new CustomerUpdateRequest("Samer", null, null, null);
 
         underTest.updateCustomer(request, id);
         //Then
@@ -158,11 +157,11 @@ class CustomerServiceTest {
     void updateCustomerEmail() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
-        CustomerUpdateRequest request = new CustomerUpdateRequest(null, "samer@example.com", null);
+        CustomerUpdateRequest request = new CustomerUpdateRequest(null, "samer@example.com", null, null);
         when(customerDao.checkIfEmailExist(request.email())).thenReturn(false);
         underTest.updateCustomer(request, id);
         //Then
@@ -178,11 +177,11 @@ class CustomerServiceTest {
     void updateCustomerAge() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
-        CustomerUpdateRequest request = new CustomerUpdateRequest(null, null, 33);
+        CustomerUpdateRequest request = new CustomerUpdateRequest(null, null, 33, null);
         underTest.updateCustomer(request, id);
         //Then
         ArgumentCaptor<Customer> captorCustomer = ArgumentCaptor.forClass(Customer.class);
@@ -197,11 +196,11 @@ class CustomerServiceTest {
     void updateCustomerFailsUpdatedEmailExist() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
-        CustomerUpdateRequest request = new CustomerUpdateRequest(null, "samer@example.com", null);
+        CustomerUpdateRequest request = new CustomerUpdateRequest(null, "samer@example.com", null, null);
         when(customerDao.checkIfEmailExist(request.email())).thenReturn(true);
         assertThatThrownBy(() -> underTest.updateCustomer(request, id)).isInstanceOf(DuplicateResourceException.class)
                 .hasMessage("Email already taken");
@@ -211,11 +210,11 @@ class CustomerServiceTest {
     void updateCustomerFailsNoChanges() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
-        CustomerUpdateRequest request = new CustomerUpdateRequest(null, null, null);
+        CustomerUpdateRequest request = new CustomerUpdateRequest(null, null, null, null);
         assertThatThrownBy(() -> underTest.updateCustomer(request, id)).isInstanceOf(RequestValidationException.class)
                 .hasMessage("No data changes found");
     }

@@ -3,6 +3,7 @@ package com.bachar;
 
 import com.bachar.customer.Customer;
 import com.bachar.customer.CustomerRepository;
+import com.bachar.customer.Gender;
 import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,8 +27,10 @@ public class Main {
         var lastName = faker.name().lastName();
         var email = firstName.toLowerCase() + "." + lastName.toLowerCase() + "@example.com";
         Random random = new Random();
+        int age = random.nextInt(16, 99);
+        Gender gender = age % 2 ==0? Gender.MALE : Gender.FEMALE;
         return args -> {
-            Customer customer = new Customer(firstName + " " + lastName, email, random.nextInt(16, 99));
+            Customer customer = new Customer(firstName + " " + lastName, email, age, gender);
             customerRepository.save(customer);
         };
     }
