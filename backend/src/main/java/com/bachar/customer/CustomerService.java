@@ -40,7 +40,7 @@ public class CustomerService {
     }
 
     public void removeCustomer(Long customerId) {
-        if (! customerDao.checkCustomerById(customerId)) {
+        if (!customerDao.checkCustomerById(customerId)) {
             throw new ResourceNotFoundException("Customer with id [%s] is not found".formatted(customerId));
         }
         customerDao.deleteCustomer(customerId);
@@ -49,22 +49,26 @@ public class CustomerService {
     public void updateCustomer(CustomerUpdateRequest request, Long customerId) {
         boolean update = false;
         Customer customer = getCustomer(customerId);
-        if(request.name() != null && !request.name().equals(customer.getName())) {
+        if (request.name() != null && !request.name().equals(customer.getName())) {
             customer.setName(request.name());
             update = true;
         }
-        if(request.email() != null && !request.email().equals(customer.getEmail())) {
+        if (request.email() != null && !request.email().equals(customer.getEmail())) {
             if (customerDao.checkIfEmailExist(request.email())) {
                 throw new DuplicateResourceException("Email already taken");
             }
             customer.setEmail(request.email());
             update = true;
         }
-        if(request.age() != null && !request.age().equals(customer.getAge())) {
+        if (request.age() != null && !request.age().equals(customer.getAge())) {
             customer.setAge(request.age());
             update = true;
         }
-        if(!update) {
+        if (request.gender() != null && !request.gender().equals(customer.getGender())) {
+            customer.setGender(request.gender());
+            update = true;
+        }
+        if (!update) {
             throw new RequestValidationException("No data changes found");
         }
         customerDao.updateCustomer(customer);

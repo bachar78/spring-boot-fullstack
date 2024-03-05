@@ -103,5 +103,12 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
             int result = jdbcTemplate.update(sql, customer.getAge(), customer.getId());
             System.out.println("update customer age result = " + result);
         }
+        if (customer.getGender() != null) {
+            var sql = """
+                    UPDATE customer SET gender = ? WHERE id = ?
+                    """;
+            int result = jdbcTemplate.update(sql, customer.getGender().name(), customer.getId());
+            System.out.println("update customer age result = " + result);
+        }
     }
 }
