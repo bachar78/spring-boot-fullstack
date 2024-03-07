@@ -19,9 +19,30 @@ export const saveCustomer = async (customer) => {
     }
 }
 
+export const updateCustomer = async (customer, customerId) => {
+    try {
+        return await axios.put(
+            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${customerId}`,
+            customer
+        )
+    } catch (e) {
+        throw e
+    }
+}
+
 export const deleteCustomer = async (customerId) => {
     try {
         return await axios.delete(
+            `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${customerId}`
+        )
+    } catch (e) {
+        throw e
+    }
+}
+
+export const getCustomer = async (customerId) => {
+    try {
+        return await axios.get(
             `${import.meta.env.VITE_API_BASE_URL}/api/v1/customers/${customerId}`
         )
     } catch (e) {

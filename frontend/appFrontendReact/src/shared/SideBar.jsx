@@ -16,7 +16,7 @@ import {
     MenuButton,
     MenuDivider,
     MenuItem,
-    MenuList, Image,
+    MenuList, Image, Link,
 } from '@chakra-ui/react';
 import {
     FiHome,
@@ -71,6 +71,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
 const NavItem = ({ icon, children, ...rest }) => {
     return (
+        // <Link></Link>
         <Box
             as="a"
             href="#"
@@ -84,7 +85,7 @@ const NavItem = ({ icon, children, ...rest }) => {
                 role="group"
                 cursor="pointer"
                 _hover={{
-                    bg: 'cyan.400',
+                    bg: "red.400",
                     color: 'white',
                 }}
                 {...rest}>
@@ -129,7 +130,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                 fontSize="2xl"
                 fontFamily="monospace"
                 fontWeight="bold">
-                Logo
+                Dashboard
             </Text>
 
             <HStack spacing={{ base: '0', md: '6' }}>

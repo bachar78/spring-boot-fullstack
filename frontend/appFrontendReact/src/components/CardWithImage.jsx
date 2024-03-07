@@ -22,6 +22,7 @@ import {
 import {useRef} from "react";
 import {deleteCustomer, getCustomers} from "../services/client.js";
 import {errorNotification, successNotification} from "../services/notification.js";
+import UpdateUserDrawer from "./UpdateUserDrawer.jsx";
 
 export default function CardWithImage({id, name, email, age, gender, imageNumber, fetchCustomers}) {
     const randomUserGender = gender === "MALE" ? "men" : "women";
@@ -31,9 +32,11 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
         <Center py={6}>
             <Box
                 maxW={'300px'}
+                minW={'300px'}
                 w={'full'}
+                m={2}
                 bg={useColorModeValue('white', 'gray.800')}
-                boxShadow={'2xl'}
+                boxShadow={'lg'}
                 rounded={'md'}
                 overflow={'hidden'}>
                 <Image
@@ -57,7 +60,7 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                     />
                 </Flex>
 
-                <Box p={6}>
+                <Box>
                     <Stack spacing={2} align={'center'} mb={5}>
                         <Tag borderRadius={"full"}>{id}</Tag>
                         <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
@@ -67,8 +70,8 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                         <Text color={'gray.500'}>Age {age} | {gender} </Text>
                     </Stack>
                 </Box>
-                <Stack m={8}>
-                    <Button mt={8}
+                <Stack m={8} mt={12} direction={"row"} align={'center'} justify={'center'}>
+                    <Button
                             bg={'red.400'}
                             color={"white"}
                             rounded={'full'}
@@ -122,6 +125,11 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                             </AlertDialogContent>
                         </AlertDialogOverlay>
                     </AlertDialog>
+                    <UpdateUserDrawer
+                        fetchCustomers={fetchCustomers}
+                        initialValues={{ name, email, age, gender}}
+                        customerId={id}
+                    />
                 </Stack>
             </Box>
         </Center>

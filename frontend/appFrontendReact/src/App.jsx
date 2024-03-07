@@ -3,7 +3,7 @@ import SidebarWithHeader from "./shared/SideBar.jsx";
 import {useEffect, useState} from "react";
 import {getCustomers} from "./services/client.js";
 import CardWithImage from "./components/CardWithImage.jsx";
-import DrawerForm from "./components/DrawerForm.jsx";
+import CreateUserDrawer from "./components/CreateUserDrawer.jsx";
 import 'react-toastify/dist/ReactToastify.css';
 import {errorNotification} from "./services/notification.js";
 
@@ -47,7 +47,7 @@ const App = () => {
     if (customers.length <= 0) {
         return (
             <SidebarWithHeader>
-                <DrawerForm/>
+                <CreateUserDrawer/>
                 <Text mt={8}>No Customers Available</Text>
             </SidebarWithHeader>
         )
@@ -55,14 +55,14 @@ const App = () => {
     if (err !== "") {
         return (
             <SidebarWithHeader>
-                <DrawerForm/>
+                <CreateUserDrawer/>
                 <Text mt={8}>Ooooops there was an error</Text>
             </SidebarWithHeader>
         )
     }
     return (
         <SidebarWithHeader>
-            <DrawerForm fetchCustomers={fetchCustomers}/>
+            <CreateUserDrawer fetchCustomers={fetchCustomers}/>
             <Wrap justify={"center"} spacing={"30px"}>
                 {
                     customers.map((customer, index) => (
