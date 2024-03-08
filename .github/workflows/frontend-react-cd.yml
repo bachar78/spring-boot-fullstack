@@ -1,29 +1,15 @@
-name: CD - Deploy Backend
+name: CD - Deploy Frontend
 on:
   workflow_dispatch:
   push:
     branches:
       - master
     paths:
-      - backend/**
+      - frontend/appFrontendReact/**
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15.5
-        env:
-          POSTGRES_USER: bachar
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: customer
-        ports:
-          - 5332:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     defaults:
       run:
         working-directory: ./backend
@@ -39,39 +25,29 @@ jobs:
           curl -X POST -H 'Content-type: application/json'
           --data '{"text":"Deployment started :progress_bar: :crossed_fingers:"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
+      - name: Set build number
+        id: build-number
+        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-      ## here how we can export any value from any step
-      - name: Set build number
-        id: build-number
-        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
-      - name: Send Slack Message
-        run: >
-          curl -X POST -H 'Content-type: application/json' 
-          --data '{"text":":maven: Building with Maven"}' 
-          ${{ secrets.SLACK_WEBHOOK_URL }}
-      - name: Build Package Push with Maven
-        run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
-      - name: Send Slack Message
-        run: >
-          curl -X POST -H 'Content-type: application/json' 
-          --data '{"text":":docker: image ${{steps.build-number.outputs.BUILD_NUMBER}} pushed to ${{secrets.DOCKER_HUB_URL}}"}' 
-          ${{ secrets.SLACK_WEBHOOK_URL }}
-      - name: update Dockerrun.aws.json api image tag with new build number
+      - name: Docker Build and push
+        run: |
+          chmod +x ../../.ci/build-publish.sh
+          USERNAME=bdaowd \
+          REPO=fullstack-react \
+          TAG=${{ steps.build-number.outputs.BUILD_NUMBER }} \
+          ../../.ci/build-publish.sh . \
+            --build-arg api_base_url=http://fullStack-api-tst.eba-jpi5vcgb.eu-north-1.elasticbeanstalk.com:8080
+      - name: update Dockerrun.aws.json react image tag with new build number
         run: |
           echo "Dockerrun.aws.json before updating tag"
-          cat ../Dockerrun.aws.json
-          sed -i -E 's_(bdaowd/fullstack-api:)([^"]*)_\1'${{steps.build-number.outputs.BUILD_NUMBER}}'_' ../Dockerrun.aws.json
+          cat ../../Dockerrun.aws.json
+          sed -i -E 's_(bdaowd/fullstack-react:)([^"]*)_\1'${{steps.build-number.outputs.BUILD_NUMBER}}'_' ../Dockerrun.aws.json
           echo "Dockerrun.aws.json after updating tag"
-          cat ../Dockerrun.aws.json
+          cat ../../Dockerrun.aws.json
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
@@ -88,6 +64,7 @@ jobs:
           version_description: ${{ github.SHA }}
           region: ${{secrets.EB_REGION}}
           deployment_package: Dockerrun.aws.json
+          wait_for_environment_recovery: 60
       - name: Send Slack Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
@@ -97,7 +74,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add ../Dockerrun.aws.json
+          git add ../../Dockerrun.aws.json
           git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
           git push
       - name: Send Slack Message
@@ -111,4 +88,4 @@ jobs:
           curl -X POST -H 'Content-type: application/json' 
           --data '{"text":"Job Status ${{ job.status }}"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
-
+      
