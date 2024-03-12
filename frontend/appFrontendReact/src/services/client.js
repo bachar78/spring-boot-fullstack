@@ -49,3 +49,14 @@ export const getCustomer = async (customerId) => {
         throw e
     }
 }
+
+export const login = async (emailAndPassword) => {
+    try {
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/login`,
+            emailAndPassword
+        )
+    } catch (e) {
+        throw e
+    }
+}
