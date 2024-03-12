@@ -55,7 +55,7 @@ class CustomerJPADateAccessServiceTest {
         Customer customer = new Customer(
                 faker.name().fullName(),
                 faker.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20,
+                faker.internet().password(), 20,
                 Gender.MALE);
 
         //When
@@ -100,7 +100,7 @@ class CustomerJPADateAccessServiceTest {
         Customer customer = new Customer(
                 faker.name().fullName(),
                 faker.internet().safeEmailAddress() + "-" + UUID.randomUUID(),
-                20,
+                faker.internet().password(), 20,
                 Gender.MALE);
         //When
         underTest.updateCustomer(customer);

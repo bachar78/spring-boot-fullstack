@@ -20,7 +20,8 @@ public class GenerateRequests {
         String email = name + UUID.randomUUID() + "@example.com";
         int age = random.nextInt(18, 77);
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
-        return new CustomerRegistrationRequest(name, email, age, gender);
+        String password = "password";
+        return new CustomerRegistrationRequest(name, email, password, age, gender);
     }
 
     public static CustomerUpdateRequest generateCustomerUpdateRequest() {

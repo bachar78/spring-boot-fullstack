@@ -20,12 +20,12 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getCustomers() {
+    public List<CustomerDTO> getCustomers() {
         return customerService.selectAllCustomers();
     }
 
     @GetMapping("{customerId}")
-    public Customer getCustomer(@PathVariable("customerId") Long customerId) {
+    public CustomerDTO getCustomer(@PathVariable("customerId") Long customerId) {
         return customerService.getCustomer(customerId);
     }
 
@@ -44,8 +44,12 @@ public class CustomerController {
     }
 
     @PutMapping("{customerId}")
-    public void updateCustomer(@RequestBody CustomerUpdateRequest request, @PathVariable("customerId") Long customerId) {
+    public ResponseEntity<?> updateCustomer(@RequestBody CustomerUpdateRequest request, @PathVariable("customerId") Long customerId) {
         customerService.updateCustomer(request, customerId);
+        String token = jwtUtil.issueToken(request.email(), "ROLE_USER");
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .build();
     }
 
 

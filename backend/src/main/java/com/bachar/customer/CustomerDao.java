@@ -17,5 +17,6 @@ public interface CustomerDao {
     void deleteCustomer(Long customerId);
 
     void updateCustomer(Customer customer);
+    Optional<Customer> findCustomerByEamil(String email);
 
 }

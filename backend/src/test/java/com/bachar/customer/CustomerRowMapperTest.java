@@ -1,6 +1,5 @@
 package com.bachar.customer;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +23,7 @@ class CustomerRowMapperTest {
     @Test
     void mapRow() throws SQLException {
         //Given
-        Customer customer = new Customer(1L, "bachar", "bachar@example.com", 44, Gender.MALE);
+        Customer customer = new Customer(1L, "bachar", "bachar@example.com", "password", 44, Gender.MALE);
         ResultSet mockedRS = mock(ResultSet.class);
         when(mockedRS.getLong("id")).thenReturn(1L);
         when(mockedRS.getString("name")).thenReturn("bachar");

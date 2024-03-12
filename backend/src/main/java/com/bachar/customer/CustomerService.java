@@ -4,25 +4,31 @@ import com.bachar.exception.RequestValidationException;
 import com.bachar.exception.DuplicateResourceException;
 import com.bachar.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
 
     private final CustomerDao customerDao;
+    private final CustomerDTOMapper customerDTOMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao) {
+    public CustomerService(@Qualifier("jdbc") CustomerDao customerDao, CustomerDTOMapper customerDTOMapper, PasswordEncoder passwordEncoder) {
         this.customerDao = customerDao;
+        this.customerDTOMapper = customerDTOMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public List<Customer> selectAllCustomers() {
-        return customerDao.getAllCustomers();
+    public List<CustomerDTO> selectAllCustomers() {
+        return customerDao.getAllCustomers().stream().map(customerDTOMapper).collect(Collectors.toList());
     }
 
-    public Customer getCustomer(Long customerId) {
-        return customerDao.getCustomerById(customerId)
+    public CustomerDTO getCustomer(Long customerId) {
+        return customerDao.getCustomerById(customerId).map(customerDTOMapper)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer with id [%s] is not found".formatted(customerId)));
     }
 
@@ -34,6 +40,7 @@ public class CustomerService {
                 new Customer(
                         request.name(),
                         request.email(),
+                        passwordEncoder.encode(request.password()),
                         request.age(),
                         request.gender())
         );
@@ -48,7 +55,8 @@ public class CustomerService {
 
     public void updateCustomer(CustomerUpdateRequest request, Long customerId) {
         boolean update = false;
-        Customer customer = getCustomer(customerId);
+        Customer customer = customerDao.getCustomerById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer with id [%s] is not found".formatted(customerId)));
         if (request.name() != null && !request.name().equals(customer.getName())) {
             customer.setName(request.name());
             update = true;

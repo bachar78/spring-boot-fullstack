@@ -49,4 +49,9 @@ public class CustomerJPADateAccessService implements CustomerDao {
     public void updateCustomer(Customer customer) {
         customerRepository.save(customer);
     }
+
+    @Override
+    public Optional<Customer> findCustomerByEamil(String email) {
+        return customerRepository.findCustomerByEmail(email);
+    }
 }

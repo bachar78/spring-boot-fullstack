@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -24,10 +25,14 @@ class CustomerServiceTest {
     @Mock
     private CustomerDao customerDao;
 
+    @Mock
+    PasswordEncoder passwordEncoder;
+
+    private final CustomerDTOMapper customerDTOMapper = new CustomerDTOMapper();
 
     @BeforeEach
     void setUp() {
-        underTest = new CustomerService(customerDao);
+        underTest = new CustomerService(customerDao, customerDTOMapper, passwordEncoder);
     }
 
     @Test
@@ -42,12 +47,12 @@ class CustomerServiceTest {
     void canGetCustomer() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", "password", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //Then
-        Customer customerInDB = underTest.getCustomer(id);
-        assertThat(customerInDB).isEqualTo(customer);
+        CustomerDTO customerInDB = underTest.getCustomer(id);
+        assertThat(customerInDB).isEqualTo(customerDTOMapper.apply(customer));
     }
 
     @Test
@@ -65,11 +70,13 @@ class CustomerServiceTest {
     @Test
     void addCustomer() {
         //Given
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Bachar", "bachar@example.com", 45, Gender.MALE);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Bachar", "bachar@example.com", "password", 45, Gender.MALE);
         //When
         when(customerDao.checkIfEmailExist(request.email())).thenReturn(false);
         //Then
         ArgumentCaptor<Customer> argumentCaptor = ArgumentCaptor.forClass(Customer.class);
+        String passwordHash = "$$987#$000";
+        when(passwordEncoder.encode("password")).thenReturn(passwordHash);
         underTest.addCustomer(request);
         verify(customerDao).insertCustomer(argumentCaptor.capture());
         Customer customerCaptured = argumentCaptor.getValue();
@@ -77,12 +84,13 @@ class CustomerServiceTest {
         assertThat(customerCaptured.getName()).isEqualTo(request.name());
         assertThat(customerCaptured.getEmail()).isEqualTo(request.email());
         assertThat(customerCaptured.getAge()).isEqualTo(request.age());
+        assertThat(customerCaptured.getPassword()).isEqualTo(passwordHash);
     }
 
     @Test
     void addCustomerThrowError() {
         //Given
-        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Bachar", "bachar@example.com", 45, Gender.MALE);
+        CustomerRegistrationRequest request = new CustomerRegistrationRequest("Bachar", "bachar@example.com", "password", 45, Gender.MALE);
         //When
         when(customerDao.checkIfEmailExist(request.email())).thenReturn(true);
         //Then
@@ -117,7 +125,7 @@ class CustomerServiceTest {
     void updateAllCustomerProperties() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", "password", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
@@ -137,7 +145,7 @@ class CustomerServiceTest {
     void updateCustomerName() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", "password", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
@@ -157,7 +165,7 @@ class CustomerServiceTest {
     void updateCustomerEmail() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", "password", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
@@ -177,7 +185,7 @@ class CustomerServiceTest {
     void updateCustomerAge() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", "password", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
@@ -196,7 +204,7 @@ class CustomerServiceTest {
     void updateCustomerFailsUpdatedEmailExist() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", "password", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When
@@ -210,7 +218,7 @@ class CustomerServiceTest {
     void updateCustomerFailsNoChanges() {
         //Given
         var id = 1L;
-        Customer customer = new Customer(id, "Bachar", "bachar@example.com", 23, Gender.MALE);
+        Customer customer = new Customer(id, "Bachar", "bachar@example.com", "password", 23, Gender.MALE);
         //When
         when(customerDao.getCustomerById(id)).thenReturn(Optional.of(customer));
         //When

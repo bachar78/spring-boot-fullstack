@@ -1,12 +1,15 @@
 package com.bachar.customer;
 
 import com.bachar.AbstractTestcontainers;
+import com.bachar.TestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
+
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -16,6 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 // This annotation loads anything our jpa component need in order to run
 @DataJpaTest
+@Import({TestConfig.class})
 class CustomerRepositoryTest extends AbstractTestcontainers{
 
     @Autowired
@@ -38,7 +42,7 @@ class CustomerRepositoryTest extends AbstractTestcontainers{
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20,
+                FAKER.internet().password(), 20,
                 Gender.MALE);
         underTest.save(customer);
         //When
@@ -64,7 +68,7 @@ class CustomerRepositoryTest extends AbstractTestcontainers{
         Customer customer = new Customer(
                 FAKER.name().fullName(),
                 email,
-                20,
+                FAKER.internet().password(), 20,
                 Gender.MALE);
         underTest.save(customer);
         Long customerId = underTest.findAll().stream().filter(c -> c.getEmail().equals(email))
