@@ -20,8 +20,8 @@ import {
     AlertDialogBody, AlertDialogFooter,
 } from '@chakra-ui/react'
 import {useRef} from "react";
-import {deleteCustomer, getCustomers} from "../services/client.js";
-import {errorNotification, successNotification} from "../services/notification.js";
+import {deleteCustomer, getCustomers} from "../../services/client.js";
+import {errorNotification, successNotification} from "../../services/notification.js";
 import UpdateUserDrawer from "./UpdateUserDrawer.jsx";
 
 export default function CardWithImage({id, name, email, age, gender, imageNumber, fetchCustomers}) {

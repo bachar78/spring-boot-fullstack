@@ -6,6 +6,8 @@ import {ChakraProvider} from '@chakra-ui/react'
 import {ToastContainer} from 'react-toastify';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Login from "./components/login/Login.jsx";
+import AuthProvider from "./components/context/AuthContext.jsx";
+import ProtectedRoute from "./shared/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
     {
@@ -13,7 +15,7 @@ const router = createBrowserRouter([
         element: <Login/>
     }, {
         path: "dashboard",
-        element: <App/>
+        element: <ProtectedRoute><App/></ProtectedRoute>
     }
 ])
 
@@ -23,7 +25,9 @@ ReactDOM
         <React.StrictMode>
             <ToastContainer/>
             <ChakraProvider>
-                <RouterProvider router={router}/>
+                <AuthProvider>
+                    <RouterProvider router={router}/>
+                </AuthProvider>
             </ChakraProvider>
         </React.StrictMode>,
     )

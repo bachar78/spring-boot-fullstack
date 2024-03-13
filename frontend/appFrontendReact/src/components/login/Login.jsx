@@ -11,6 +11,9 @@ import {
 } from '@chakra-ui/react'
 import {Formik, Form, useField} from "formik";
 import * as Yup from 'yup';
+import {useAuth} from "../context/AuthContext.jsx";
+import {errorNotification} from "../../services/notification.js";
+import {useNavigate} from "react-router-dom";
 
 
 const MyTextInput = ({label, ...props}) => {
@@ -30,17 +33,28 @@ const MyTextInput = ({label, ...props}) => {
 
 
 const LoginForm = () => {
+    const {login} = useAuth();
+    const navigate = useNavigate();
     return (
         <Formik
             validateOnMount={true}
             validationSchema={
                 Yup.object({
                     email: Yup.string().email("Must be valid email").required("Email is required"),
-                    password: Yup.string().max(20, "Password cannot be more that 20 characters").required("Password is required")
+                    password: Yup.string().max(20, "Password cannot be more than 20 characters").required("Password is required")
                 })
             }
             initialValues={{email: '', password: ''}} onSubmit={(values, {setSubmitting}) => {
-            alert(JSON.stringify(values, null, 0))
+            // alert(JSON.stringify(values, null, 0))
+            login(values).then(res => {
+                setSubmitting(true)
+                navigate("/dashboard")
+                console.log("Success logged in");
+            }).catch(err => {
+                errorNotification(err.response.data.message)
+            }).finally(() => {
+                setSubmitting(false)
+            })
         }}>
             {
                 ({isValid, isSubmitting}) =>

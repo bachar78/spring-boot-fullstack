@@ -2,8 +2,8 @@ import {Wrap, WrapItem, Spinner, Text, useDisclosure} from '@chakra-ui/react'
 import SidebarWithHeader from "./shared/SideBar.jsx";
 import {useEffect, useState} from "react";
 import {getCustomers} from "./services/client.js";
-import CardWithImage from "./components/CardWithImage.jsx";
-import CreateUserDrawer from "./components/CreateUserDrawer.jsx";
+import CardWithImage from "./components/customer/CardWithImage.jsx";
+import CreateUserDrawer from "./components/customer/CreateUserDrawer.jsx";
 import 'react-toastify/dist/ReactToastify.css';
 import {errorNotification} from "./services/notification.js";
 

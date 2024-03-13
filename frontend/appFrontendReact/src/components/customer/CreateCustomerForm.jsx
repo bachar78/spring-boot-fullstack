@@ -1,8 +1,9 @@
 import {Formik, Form, useField} from 'formik';
 import * as Yup from 'yup';
 import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
-import {saveCustomer} from "../services/client.js";
-import {errorNotification, successNotification} from "../services/notification.js";
+import {saveCustomer} from "../../services/client.js";
+import {errorNotification, successNotification} from "../../services/notification.js";
+
 
 const MyTextInput = ({label, ...props}) => {
     const [field, meta] = useField(props);
@@ -42,6 +43,7 @@ const CreateCustomerForm = ({fetchCustomers}) => {
                 initialValues={{
                     name: '',
                     email: '',
+                    password: '',
                     age: 0,
                     gender: '',
                 }}
@@ -52,6 +54,10 @@ const CreateCustomerForm = ({fetchCustomers}) => {
                     email: Yup.string()
                         .email('Invalid email address')
                         .required('Required'),
+                    password: Yup.string()
+                        .min(4, "Password cannot be less than 4 characters")
+                        .max(20, "Password cannot be more than 20 characters")
+                        .required("Password is required"),
                     age: Yup.number()
                         .min(16, 'You must be at least 16 years of age')
                         .max(100, 'Less than 100 years of age')
@@ -70,7 +76,7 @@ const CreateCustomerForm = ({fetchCustomers}) => {
                         successNotification(`${customer.name} was successfully saved`)
                     }).catch(err => {
                         errorNotification(err.response.data.message)
-                    }).finally(()=> {
+                    }).finally(() => {
                         setSubmitting(false)
                     })
                 }}
@@ -89,6 +95,12 @@ const CreateCustomerForm = ({fetchCustomers}) => {
                                 name="email"
                                 type="email"
                                 placeholder="Insert your email"
+                            />
+                            <MyTextInput
+                                label={"Password"}
+                                name={"password"}
+                                type={"password"}
+                                placeholder={"Type your password"}
                             />
                             <MyTextInput
                                 label="Age"
