@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "bachar-frontend-react",
-      "image": "bdaowd/fullstack-react:08.03.2024.11.22.42",
+      "image": "bdaowd/fullstack-react:13.03.2024.23.52.48",
       "essential": true,
       "memory": 256,
       "portMappings": [
