@@ -37,7 +37,9 @@ public class Main {
         return args -> {
             Customer customer = new Customer(firstName + " " + lastName, email, passwordEncoder.encode(password), age, gender);
             customerRepository.save(customer);
+            System.out.println(email);
         };
+
     }
 
 }

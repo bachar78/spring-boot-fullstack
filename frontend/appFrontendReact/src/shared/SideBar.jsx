@@ -156,14 +156,16 @@ const MobileNav = ({onOpen, ...rest}) => {
                                     alignItems="flex-start"
                                     spacing="1px"
                                     ml="2">
-                                    {/*<Text fontSize="sm">{customer.email}</Text>*/}
-                                    {/*{*/}
-                                    {/*    customer.roles.map((role, idx)=> (*/}
-                                    {/*        <Text key={idx} fontSize="xs" color="gray.600">*/}
-                                    {/*            {role}*/}
-                                    {/*        </Text>*/}
-                                    {/*    ))*/}
-                                    {/*}*/}
+                                    {customer && (
+                                        <>
+                                            <Text fontSize="sm">{customer.email}</Text>
+                                            {customer.roles !== undefined && customer.roles.map((role, idx) => (
+                                                <Text key={idx} fontSize="xs" color="gray.600">
+                                                    {role}
+                                                </Text>
+                                            ))}
+                                        </>
+                                    )}
 
                                 </VStack>
                                 <Box display={{base: 'none', md: 'flex'}}>

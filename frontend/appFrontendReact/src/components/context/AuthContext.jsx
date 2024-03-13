@@ -6,7 +6,7 @@ import {jwtDecode} from "jwt-decode"
 
 const AuthContext = createContext({})
 const AuthProvider = ({children}) => {
-    const [customer, setCustomer] = useState({})
+    const [customer, setCustomer] = useState(null)
 
 
     useEffect(() => {
@@ -26,7 +26,8 @@ const AuthProvider = ({children}) => {
                 localStorage.setItem("access_token", jwt);
                 const decodedJwt = jwtDecode(jwt);
                 setCustomer({
-                   ...res.data.customerDTO
+                    email: decodedJwt.sub,
+                    roles: decodedJwt.scopes
                 })
                 resolve(res)
             }).catch(err => {
