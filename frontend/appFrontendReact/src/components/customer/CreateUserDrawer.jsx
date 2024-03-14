@@ -27,7 +27,7 @@ const CreateUserDrawer = ({fetchCustomers}) => {
                     <DrawerCloseButton />
                     <DrawerHeader>Create New Customer</DrawerHeader>
                     <DrawerBody>
-                        <CreateCustomerForm fetchCustomers={fetchCustomers}  onClose={onClose}/>
+                        <CreateCustomerForm onSuccess={fetchCustomers}  onClose={onClose}/>
                     </DrawerBody>
                     <DrawerFooter>
                         <Button

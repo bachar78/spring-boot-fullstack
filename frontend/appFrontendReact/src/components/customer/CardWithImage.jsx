@@ -23,11 +23,14 @@ import {useRef} from "react";
 import {deleteCustomer, getCustomers} from "../../services/client.js";
 import {errorNotification, successNotification} from "../../services/notification.js";
 import UpdateUserDrawer from "./UpdateUserDrawer.jsx";
+import {jwtDecode} from "jwt-decode"
+import {useAuth} from "../context/AuthContext.jsx";
 
 export default function CardWithImage({id, name, email, age, gender, imageNumber, fetchCustomers}) {
     const randomUserGender = gender === "MALE" ? "men" : "women";
     const {isOpen, onOpen, onClose} = useDisclosure()
     const cancelRef = useRef()
+    const {logout} = useAuth();
     return (
         <Center py={6}>
             <Box
@@ -72,20 +75,20 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                 </Box>
                 <Stack m={8} mt={12} direction={"row"} align={'center'} justify={'center'}>
                     <Button
-                            bg={'red.400'}
-                            color={"white"}
-                            rounded={'full'}
-                            _hover={
-                                {
-                                    transform: 'translateY(-2px)',
-                                    boxShadow: 'lg'
-                                }
+                        bg={'red.400'}
+                        color={"white"}
+                        rounded={'full'}
+                        _hover={
+                            {
+                                transform: 'translateY(-2px)',
+                                boxShadow: 'lg'
                             }
-                            _focus={{
-                                bg: 'green.500'
+                        }
+                        _focus={{
+                            bg: 'green.500'
 
-                            }}
-                            onClick={onOpen}
+                        }}
+                        onClick={onOpen}
                     >
                         Delete
                     </Button>
@@ -113,6 +116,14 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                                             console.log(res)
                                             fetchCustomers()
                                             successNotification(`${name} was successfully deleted`)
+                                            const token = localStorage.getItem("access_token")
+                                            if (token) {
+                                                const decodedToken = jwtDecode(token)
+                                                if (decodedToken.sub === email) {
+                                                    logout()
+                                                }
+
+                                            }
                                         }).catch(err => {
                                             console.log(err)
                                             errorNotification(err.response.data.message)
@@ -127,7 +138,7 @@ export default function CardWithImage({id, name, email, age, gender, imageNumber
                     </AlertDialog>
                     <UpdateUserDrawer
                         fetchCustomers={fetchCustomers}
-                        initialValues={{ name, email, age, gender}}
+                        initialValues={{name, email, age, gender}}
                         customerId={id}
                     />
                 </Stack>
