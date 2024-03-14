@@ -15,7 +15,7 @@
     },
     {
       "name": "fullStack-API",
-      "image": "bdaowd/fullstack-api:13.03.2024.23.34.53",
+      "image": "bdaowd/fullstack-api:14.03.2024.13.56.58",
       "essential": true,
       "memory": 512,
       "portMappings": [
