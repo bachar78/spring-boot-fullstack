@@ -7,7 +7,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5332/customer
+    url: jdbc:postgresql://awseb-e-ggcmxnzmni-stack-awsebrdsdatabase-qk3phbsw1mo2.cl60ecgcss14.eu-north-1.rds.amazonaws.com:5432/ebdb
     username: bachar
     password: password
   jpa:
