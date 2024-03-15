@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "fullStack-API",
-      "image": "bdaowd/fullstack-api:15.03.2024.15.45.26",
+      "image": "bdaowd/fullstack-api:15.03.2024.17.36.37",
       "essential": true,
       "memory": 512,
       "portMappings": [
