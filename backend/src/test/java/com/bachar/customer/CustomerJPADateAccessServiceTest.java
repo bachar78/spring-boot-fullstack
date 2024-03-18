@@ -4,11 +4,19 @@ import com.github.javafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.UUID;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class CustomerJPADateAccessServiceTest {
     Faker faker = new Faker();
@@ -32,10 +40,18 @@ class CustomerJPADateAccessServiceTest {
 
     @Test
     void getAllCustomers() {
+        Page<Customer> page = mock(Page.class);
+        List<Customer> customers = List.of(new Customer());
+        when(page.getContent()).thenReturn(customers);
+        when(customerRepository.findAll(any(Pageable.class))).thenReturn(page);
         //When
-        underTest.getAllCustomers();
-        //Then
-        Mockito.verify(customerRepository).findAll();
+       List<Customer> expected = underTest.getAllCustomers();
+
+       //Then
+       assertThat(expected).isEqualTo(customers);
+        ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
+        verify(customerRepository).findAll(pageableArgumentCaptor.capture());
+        assertThat(pageableArgumentCaptor.getValue()).isEqualTo(Pageable.ofSize(500));
     }
 
     @Test

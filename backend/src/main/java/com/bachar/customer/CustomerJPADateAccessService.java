@@ -1,5 +1,7 @@
 package com.bachar.customer;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +19,8 @@ public class CustomerJPADateAccessService implements CustomerDao {
 
     @Override
     public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+        Page<Customer> customersPage = customerRepository.findAll(Pageable.ofSize(500));
+        return customersPage.getContent();
     }
 
     @Override
